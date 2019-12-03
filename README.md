@@ -185,8 +185,8 @@ Cela permet d'éviter à tous de se créer une machine de développement, ce qui
       --network=gladys-net \
       --name zigbee2mqtt \
       -v ${PWD}/zigbee2mqtt/data:/app/data \
-      --dev /dev/ttyACM0:/dev/ttyACM0 \
-      koenkk/zigbee2mqtt:arm32v6
+      --device=/dev/ttyACM0:/dev/ttyACM0 \
+      koenkk/zigbee2mqtt
   ```
 
 où `/dev/ttyACM0` représente l'interface USB sur laquelle est connecté le dongle CC2531.  
@@ -199,11 +199,22 @@ Afin de faciliter le lancement et la configuration des différents containers, j
   - `gladys_run.sh` pour lancer **Gladys**
   - `mqtt_run.sh` pour lancer **MQTT**
   - `zigbee2mqtt_run.sh` pour lancer **Zigbee2mqtt**  
-  Notez que ce dernier recherche automatiquement l'interface `/dev/ttyX` sur laquelle est connecté le dongle.
+  Notez que ce dernier recherche automatiquement l'interface `/dev/ttyX` sur laquelle est connectée le dongle.
+
+  Pour les utiliser, il faut copier tous les scripts dans un répertoire dédié.  
+  Il faut ensuite rendre ces scripts exécutables avec la commande :  
+  ```sh
+  chmod +x *.sh
+  ```
+  
+  Il ne reste plus qu'à exécuter le script principal qui fait appel aux autres pour lancer les différents containers :
+  ```sh
+    ./gladys-zigbee2mqtt_run.sh
+  ```
 
 ### Méthode manuelle avec lancement global
 
-On peut également lancer tout les containers via l'outil docker-compose.  
+On peut également lancer tous les containers via l'outil `docker-compose`.  
 Si ça intéresse certains, je pourrai développer cette partie.
 
 ### Vérification du bon fonctionnement
