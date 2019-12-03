@@ -42,4 +42,4 @@ docker run -d \
     --name zigbee2mqtt \
     -v ${PWD}/zigbee2mqtt/data:/app/data \
     --device=$TTY:/dev/ttyACM0 \
-    koenkk/zigbee2mqtt:arm32v6
+    koenkk/zigbee2mqtt
