@@ -123,7 +123,30 @@ Pour pouvoir avancer sur les tests du module **Zigbee2mqtt** et simplifier ceux-
 Cela permet d'éviter à tous de se créer une machine de développement, ce qui n'est pas forcément trivial pour celui qui n'a pas l'habitude.  
 @Pierre-Gilles, si cette façon de procéder ne te convient pas, n'hésite pas à le dire et je supprimerai cette version du Docker Hub.
 
+### Via un script de lancement
+
+Afin de faciliter le lancement et la configuration des différents containers, j'ai créé des scripts de démarrage qui sont disponibles sur le Github du Tuto.  
+  - `gladys-zigbee2mqtt_run.sh` permet de lancer et configurer tous les containers.  
+  Il fait appel à des scripts indépendants pour chacun des containers
+  - `gladys_run.sh` pour lancer **Gladys**
+  - `mqtt_run.sh` pour lancer **MQTT**
+  - `zigbee2mqtt_run.sh` pour lancer **Zigbee2mqtt**  
+  Notez que ce dernier recherche automatiquement l'interface `/dev/ttyX` sur laquelle est connectée le dongle USB.
+
+  Pour les utiliser, il faut copier les 4 scripts dans un répertoire dédié.  
+  Il faut ensuite rendre ces scripts exécutables avec la commande :  
+  ```sh
+  chmod +x *.sh
+  ```
+  
+  Il ne reste plus qu'à exécuter le script principal qui fait appel aux autres pour lancer les différents containers :
+  ```sh
+    ./gladys-zigbee2mqtt_run.sh
+  ```
+
 ### Méthode manuelle avec lancement individuel
+
+Pour ceux qui veulent approfondir leur compréhension des containers Docker, voici les différentes étapes individuelles à réaliser pour les créer et les faire communiquer entre eux.
 
 - Lancement de **Gladys**
 
@@ -191,26 +214,6 @@ Cela permet d'éviter à tous de se créer une machine de développement, ce qui
 
 où `/dev/ttyACM0` représente l'interface USB sur laquelle est connecté le dongle CC2531.  
 Le nom de cette interface peut varier en fonction du nombre de périphériques connectés sur les ports USB.
-
-- Scripts de lancement  
-Afin de faciliter le lancement et la configuration des différents containers, j'ai créé des scripts de démarrage qui sont disponibles sur le Github du Tuto.  
-  - `gladys-zigbee2mqtt_run.sh` permet de lancer et configurer tous les containers.  
-  Il fait appel à des scripts indépendants pour chacun des containers
-  - `gladys_run.sh` pour lancer **Gladys**
-  - `mqtt_run.sh` pour lancer **MQTT**
-  - `zigbee2mqtt_run.sh` pour lancer **Zigbee2mqtt**  
-  Notez que ce dernier recherche automatiquement l'interface `/dev/ttyX` sur laquelle est connectée le dongle.
-
-  Pour les utiliser, il faut copier tous les scripts dans un répertoire dédié.  
-  Il faut ensuite rendre ces scripts exécutables avec la commande :  
-  ```sh
-  chmod +x *.sh
-  ```
-  
-  Il ne reste plus qu'à exécuter le script principal qui fait appel aux autres pour lancer les différents containers :
-  ```sh
-    ./gladys-zigbee2mqtt_run.sh
-  ```
 
 ### Méthode manuelle avec lancement global
 
@@ -388,14 +391,17 @@ Voici le type de données visibles dans le log :
 ## Intégration dans Gladys
 
 Connectez-vous à **Gladys**.
-La première étape consiste à connecter **Gladys** au broker **MQTT**.  
-On se place sur l'onglet `Integrations`, on choisit le service **MQTT** puis menu `Setup` et on rentre l'adresse de notre broker **MQTT** :
-`mqtt://mqtt-broker:1883`
+Dans la nouvelle version du service **Zigbee2mqtt**, il n'y a plus besoin de  connecter **Gladys** au broker **MQTT**. C'est fait automatiquement et est donc transparent pour l'utilisateur.
 
-`mqtt-broker` correspond au nom de notre container **MQTT**  
-On peut utiliser cette notation grâce à l'option `--network` que nous avons utilisée lors du lancement de nos containers. 👍
+Pour information, le nom du container **MQTT** associé au service est désormais 
+`mqtt4z2m`.  
 
-![Configuration MQTT](./img/Configuration_MQTT_success.jpg)
+Il faut tout d'abord configurer le service en utilisant :
+- l'onglet `Settings` (configuration du dongle USB)
+![Configuration dongle](./img/Settings.png)  
+
+- l'onglet `Setup` (Lancement des containers du service)
+![Lancement Zigbee2mqtt](./img/Setup.png)  
 
 Pour utiliser le service Zigbee2mqtt, comme pour les autres services, rendez-vous sur l'onglet `Integrations`, sélectionnez **Zigbee2mqtt** puis `Setup` et cliquez sur le bouton `Scan`. 
 Si vous avez appairé des objets, vous les voyez apparaître dans la fenêtre.
@@ -422,6 +428,6 @@ Amusez-vous bien !!! 🍾
 
 Si ça ne fonctionne pas comme indiqué ou si votre objet ne semble pas bien intégré, venez en parler sur le [forum](https://community.gladysassistant.com) en précisant le nom du modèle et en ajoutant les parties des logs **Zigbee2mqtt** et **Gladys** qui vous semblent intéressantes.
 
-Enfin, si votre objet fonctionne correctement, laissez quand même un commentaire sur le [forum](https://community.gladysassistant.com) avec le nom du modèle, ça permettra de mettre à jour une liste du matéreil testé et ça fera toujours plaisir aux développeurs... ;-)
+Enfin, si votre objet fonctionne correctement, laissez quand même un commentaire sur le [forum](https://community.gladysassistant.com) avec le nom du modèle, ça permettra de mettre à jour une liste du matériel testé et ça fera toujours plaisir aux développeurs... ;-)
 
 Merci d'avance !

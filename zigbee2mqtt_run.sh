@@ -23,13 +23,13 @@ done
 
 # On créé le fichier de configuration de Zigbee2mqtt
 echo "Configuration de Zigbee2mqtt"
-[ -d "zigbee2mqtt/data" ] && mkdir -p zigbee2mqtt/data
+[ ! -d "zigbee2mqtt/data" ] && mkdir -p zigbee2mqtt/data
 cat <<EOF > zigbee2mqtt/data/configuration.yaml
 homeassistant: false
 permit_join: true
 mqtt:
   base_topic: zigbee2mqtt
-  server: 'mqtt://mqtt-broker'
+  server: 'mqtt://mqtt4z2m'
 serial:
   port: /dev/ttyACM0
 EOF
@@ -43,3 +43,5 @@ docker run -d \
     -v ${PWD}/zigbee2mqtt/data:/app/data \
     --device=$TTY:/dev/ttyACM0 \
     koenkk/zigbee2mqtt
+
+docker stop zigbee2mqtt
